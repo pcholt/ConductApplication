@@ -3,7 +3,7 @@ The Conduct Logic Question requires a simple application with a single form and 
 
 ## Core logic
 
-### SSimultaneous submissions will occur
+### "Simultaneous submissions will occur"
 
 I tried to use a database lock on table read, then transactions, then select as a subquery to the INSERT statement (to make the database access a single statement), but I couldn't handle simultaneous access.  I ended up using semaphores, as you can see.  I explicity set the `$autorelease` flag to release the semaphore if a process terminates.
 
