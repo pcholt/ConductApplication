@@ -62,11 +62,11 @@
 				$agent = $this->find_agent_with_fewest_leads->fetch(PDO::FETCH_OBJ);
 				echo $this->lead_insert->execute(array(
 					":agent_id"=>$agent->id,
-					":first_name"=>$POST['first_name'],
-					":last_name"=>$POST['last_name'],
-					":email"=>$POST['email'],
-					":mobile"=>$POST['mobile'],
-					":message"=>$POST['message'],
+					":first_name"=>$post_unquoted['first_name'],
+					":last_name"=>$post_unquoted['last_name'],
+					":email"=>$post_unquoted['email'],
+					":mobile"=>$post_unquoted['mobile'],
+					":message"=>$post_unquoted['message'],
 					));
 				$lead_id = $this->find_agent_join_lead->execute($dto->lastInsertId());
 			}
