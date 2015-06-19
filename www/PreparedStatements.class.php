@@ -1,5 +1,5 @@
 <?php
-
+	define("SEMAPHORE_ID", 99211283973);
 /**
 
 	Data Access Object for querying and inserting into the agents/leads database.
@@ -14,10 +14,9 @@
 		// Add a lead record, assigned to an agent_id.
 		public $lead_insert;
 
-		// Retrieve the join of a `agents` and `leads` a given lead id.
-		public $find_agent_join_lead;
-
 		private $db;
+
+		private $semaphore;
 
 		/**
 		Construct the prepared statements using
@@ -45,6 +44,9 @@
 					);
 			");
 
+			$this->db = $db;
+
+			$this->semaphore = sem_get(SEMAPHORE_ID, 1, 0666, 1);
 		}
 
 		/**
@@ -54,13 +56,20 @@
 		*/
 		public function add_lead($post_unquoted) {
 
-			$db->beginTransaction();
+			sem_acquire($this->semaphore);
+			$this->db->beginTransaction();
+
 			$this->find_agent_with_fewest_leads->execute();
 			$agent_exists = ($this->find_agent_with_fewest_leads->rowCount() == 1);
 
 			if ($agent_exists) {
+
 				$agent = $this->find_agent_with_fewest_leads->fetch(PDO::FETCH_OBJ);
-				echo $this->lead_insert->execute(array(
+
+				// Uncomment the following line in order to test simultaneous access.
+				// sleep(5);
+
+				$this->lead_insert->execute(array(
 					":agent_id"=>$agent->id,
 					":first_name"=>$post_unquoted['first_name'],
 					":last_name"=>$post_unquoted['last_name'],
@@ -68,13 +77,15 @@
 					":mobile"=>$post_unquoted['mobile'],
 					":message"=>$post_unquoted['message'],
 					));
-				$lead_id = $this->find_agent_join_lead->execute($dto->lastInsertId());
+
+				$lead_id = $this->db->lastInsertId();
 			}
 			else {
 				$lead_id = FALSE;
 			}
 
-			$db->commit();
+			$this->db->commit();
+			sem_release($this->semaphore);
 
 			return $lead_id;
 
