@@ -58,8 +58,11 @@ function send_message($lead, $agent)
 {
 	echo("Send to ".$agent->email." and ".$lead->email);
 	echo ("\n");
-// mail($agent->email, "Lead created", $_POST['message']);
-// mail($_POST['email'], "Confirm", $_POST['message']);
+
+	// UNCOMMENT THESE LINES TO SEND ACTUAL EMAILS:
+	//  mail($agent->email, "Lead created", $lead->message);
+	//  mail($lead->email, "Confirm", $lead->message);
+
 }
 
 ?>
