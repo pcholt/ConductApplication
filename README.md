@@ -21,13 +21,16 @@ My first attempt at a solution was tested using a standalone script containing a
 
 This query searches for active agents, sorted by the number of leads that the agent has allocated against them.  Sorting in ascending order and only taking the first row results in retrieval of the `agents` record with the fewest number of associated `leads` records.
 
+
 ## Installation
 
 1. Copy all files from the `www` directory into the web directory you want to host the application
 2. Load the sql data into the database from `initial.sql` with something like `cat initial.sql | mysql -ufoo -p conduct_logic_question`
 3. Create `www/config.php` in `www`. `www/config_default.php` is in the correct format.
 
+Sending emails is currently commented out.  Uncomment the `mail()` lines (around line 62 of `form_processor.php`) if you want to test with sending actual emails
+
 
 ## Afterthoughts
 
-An interesting challenge. Multiple options for a solution to the atomic-update question present themselves, and I had to try them all out before settling on semaphores.  I thought this could be solved with a little clever SQL, but experimentation and continuous testing showed me the way.
+An interesting challenge. Multiple options for a solution to the atomic-update question present themselves, and I had to try them many before settling on semaphores.  I thought this could be solved with a little clever SQL, but experimentation and continuous testing showed me which technique worked.
