@@ -33,4 +33,4 @@ Sending emails is currently commented out.  Uncomment the `mail()` lines (around
 
 ## Afterthoughts
 
-An interesting challenge. Multiple options for a solution to the atomic-update question present themselves, and I had to try them many before settling on semaphores.  I thought this could be solved with a little clever SQL, but experimentation and continuous testing showed me which technique worked.
+An interesting challenge. Multiple options for a solution to the atomic-update question presented themselves, and I had to try many before settling on semaphores.  I thought this could be solved with a little clever SQL, but experimentation and continuous testing showed me which technique worked.
